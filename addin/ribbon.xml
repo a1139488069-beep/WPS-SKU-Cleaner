@@ -1,1 +1,18 @@
-
+<customUI xmlns="http://schemas.microsoft.com/office/2006/01/customui" onLoad="SkuAddinLoad">
+  <ribbon><tabs><tab id="skuCleanerTab" label="SKU工具">
+    <group id="skuCleanupGroup" label="清理与数字格式">
+      <button id="skuCurrent" label="处理当前表" size="large" onAction="SKU_CleanCurrentSheet" screentip="清理SKU列并设为自定义0格式"/>
+      <button id="skuWorkbook" label="处理整个文件" size="large" onAction="SKU_CleanWorkbook"/>
+      <button id="skuSelection" label="处理所选区域" onAction="SKU_CleanSelection"/>
+      <button id="skuStop" label="停止处理" onAction="SkuAddinStop"/>
+    </group>
+    <group id="skuAutoGroup" label="输入与粘贴自动处理">
+      <button id="skuEnable" label="开启当前文件自动处理" onAction="SkuAddinEnableAuto"/>
+      <button id="skuDisable" label="关闭自动处理" onAction="SkuAddinDisableAuto"/>
+      <button id="skuStatus" label="查看状态" onAction="SkuAddinStatus"/>
+      <button id="skuSelfTest" label="WPS内自测" onAction="SkuAddinSelfTest"/>
+      <button id="skuBenchmark" label="2万行测速" onAction="SkuAddinBenchmark"/>
+      <button id="skuHelp" label="使用说明" onAction="SkuAddinHelp"/>
+    </group>
+  </tab></tabs></ribbon>
+</customUI>
