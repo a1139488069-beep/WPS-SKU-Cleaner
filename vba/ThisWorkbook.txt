@@ -1,1 +1,11 @@
+Option Explicit
 
+' Paste into THISWORKBOOK, not into an ordinary module.
+' If handlers already exist, merge these calls into the existing handlers.
+Private Sub Workbook_Open()
+    SKU_OnOpen
+End Sub
+
+Private Sub Workbook_SheetChange(ByVal Sh As Object, ByVal Target As Range)
+    SKU_HandleChange Sh, Target
+End Sub
