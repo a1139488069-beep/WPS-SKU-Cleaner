@@ -1,0 +1,8 @@
+{
+  "name": "wps-sku-cleaner",
+  "version": "1.0.5",
+  "addonType": "et",
+  "private": true,
+  "description": "WPS desktop JS and VBA SKU numeric cleanup macros",
+  "scripts": { "build": "node build.cjs", "test": "node --test --test-concurrency=1 tests/*.test.cjs", "start": "node server.cjs" }
+}

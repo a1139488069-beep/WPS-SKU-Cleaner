@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WPS SKU工具 · 安装</title>
+<style>
+body{font:16px/1.75 "Microsoft YaHei",sans-serif;margin:0;background:#f2f5f9;color:#203047}
+main{max-width:760px;margin:48px auto;padding:32px;background:white;border-radius:16px}
+h1{margin:0 0 12px}button{font:inherit;padding:9px 22px;margin:8px 8px 8px 0;border:0;border-radius:7px;background:#2563eb;color:white;cursor:pointer}
+button.secondary{background:#e6ebf3;color:#203047}#status{white-space:pre-wrap;background:#f2f5f9;padding:16px;border-radius:8px;overflow-wrap:anywhere}
+code{background:#edf1f6;padding:2px 6px}li{margin:6px 0}a{color:#2563eb}
+</style></head><body><main>
+<h1>WPS SKU工具</h1><p>清理数字文本 → 转换为数字 → 自定义格式 <code>0</code></p>
+<p><strong>v1.0.5 推荐离线安装：</strong>完整解压后双击 <code>Install-Offline.cmd</code>，保存所有文件并完全退出、重新打开WPS。打开文件与切换工作表不再扫描；自动处理默认暂停。离线版日常运行无需保持本地服务。本网页保留为在线备用版的安装/检查入口。</p>
+<ol><li>启动 WPS 桌面版，保持此本地服务运行。</li><li>点击“安装到 WPS”，按 WPS 提示允许安装。保存已打开文件后自行重启 WPS。</li><li>在表格的“SKU工具”选项卡，先处理当前表，再开启自动处理。</li></ol>
+<p>前导零会去掉；含字母编号也清理并设为0格式，字母保留；超过15位有效数字的编号、公式保留。运行前请保存原文件副本。</p>
+<button onclick="manage('enable')">安装在线备用版</button><button class="secondary" onclick="manage('verifyStatus')">检查在线加载项</button><button class="secondary" onclick="manage('disable')">卸载在线版本</button>
+<p id="status">正在检查安装环境…</p>
+<p>启动入口：项目文件夹中的 <code>Start-Local.cmd</code>。<a href="http://127.0.0.1:39871/install.html">打开本地安装网页</a></p>
+<p>“JS”加载项图标是入口线索，是否能安装仍由当前 WPS 版本及策略决定。若出现限制，查看项目内的使用说明，或使用 JS 宏文件。</p>
+<p><a href="https://open.wps.cn/documents/app-integration-dev/wps365/client/wpsoffice/wps-integration-mode/wps-addin-development/wps-addin-integration-business-system-development" target="_blank" rel="noreferrer">WPS 官方加载项安装接口文档</a></p>
+</main><script src="./vendor/wpsjsrpcsdk.js" onerror="window.skuSdkLoadError='SDK文件加载失败，请完整解压项目后再运行 Start-Local.cmd。'"></script><script>
+var descriptor = {name:"WPS-SKU-Cleaner",addonType:"et",online:"true",multiUser:"false",url:location.origin+"/"};
+function installerIssue(){
+  if(location.protocol==='file:') return '当前是直接打开的HTML文件（file://），不能从此地址安装WPS加载项。\n请完整解压项目，双击 Start-Local.cmd，由它打开 http://127.0.0.1:39871/install.html。\nWPS已启动也不会改变网页地址。';
+  if(location.protocol!=='http:'&&location.protocol!=='https:') return '请从 Start-Local.cmd 启动本地HTTP安装页面。';
+  if(typeof WpsAddonMgr==='undefined') return window.skuSdkLoadError||'WPS安装SDK初始化失败。请确认完整解压项目，并用浏览器打开本地HTTP安装页面；此错误与WPS是否启动无关。';
+  return '';
+}
+function manage(method){
+  var status=document.getElementById('status');
+  var issue=installerIssue();
+  if(issue){status.textContent=issue;return;}
+  status.textContent='正在请求WPS，请查看客户端或浏览器提示…';
+  try{WpsAddonMgr[method](descriptor,function(result){
+    var detail={status:result&&result.status,message:result&&(result.msg||result.message),
+      response:result&&(result.response||(result.res&&result.res.target&&result.res.target.response))};
+    status.textContent=JSON.stringify(detail,null,2)+'\n'+(method==='enable'?'若返回成功，保存文件后重启WPS，在表格中查看“SKU工具”。':'');
+  });}catch(e){status.textContent='请求失败：'+e.message+'。请确认WPS已启动，且此版本允许JS加载项。';}
+}
+document.getElementById('status').textContent=installerIssue()||'安装SDK已加载。点击“安装到 WPS”，本地服务只监听127.0.0.1，不上传表格数据。';
+</script></body></html>

@@ -1,0 +1,9 @@
+node_modules/
+*.log
+.env
+.env.*
+!.env.example
+publish.xml*
+authaddin.json
+authwebsite.xml
+jsaddinblockhost.ini
